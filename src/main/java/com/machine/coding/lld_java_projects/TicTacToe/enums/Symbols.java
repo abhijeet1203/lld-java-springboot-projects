@@ -10,7 +10,7 @@ public enum Symbols {
         this.symbol = symbol;
     }
 
-    public char getSymbol(){
+    public char getChar(){
         return symbol;
     }
 }

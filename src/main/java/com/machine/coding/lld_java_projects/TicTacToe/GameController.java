@@ -17,7 +17,7 @@ public class GameController {
 
     public void initializeGame(){
         /*
-        * ToDO
+        * Todo
         *   Register the player - Done
         *   Create Board - Done
         *   Initialize the game business logic - Done
@@ -34,6 +34,7 @@ public class GameController {
         System.out.println("Creating game board");
         Board board = new Board(gridSize);
 
+        System.out.println("Initiating game");
         Game game = new Game(playerA, playerB, board);
 
         Scoreboard scoreboard = new Scoreboard();

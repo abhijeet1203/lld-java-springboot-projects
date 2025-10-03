@@ -1,6 +1,7 @@
 package com.machine.coding.lld_java_projects.TicTacToe;
 
 import com.machine.coding.lld_java_projects.TicTacToe.enums.Status;
+import com.machine.coding.lld_java_projects.TicTacToe.exception.InvalidMoveException;
 import com.machine.coding.lld_java_projects.TicTacToe.models.Board;
 import com.machine.coding.lld_java_projects.TicTacToe.models.Player;
 import com.machine.coding.lld_java_projects.TicTacToe.observer.GameObserver;
@@ -17,10 +18,22 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Game implements GameSubject {
-    private Player player1, player2, currentPlayer;
+    private Player player1, player2, currentPlayer, winner;
     private Board board;
     private Status status;
     private GameState state;
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
+    public Status getStatus(){
+        return status;
+    }
+
+    public void setState(GameState state) {
+        this.state = state;
+    }
 
     private final List<WinningStrategy> winningStrategies;
     private final List<GameObserver> observers = new ArrayList<>();
@@ -46,10 +59,36 @@ public class Game implements GameSubject {
     }
 
     @Override
-    public void notifyObserver() {
-
+    public void notifyObserver(){
+        for(GameObserver observer : observers){
+            observer.updateGame(this);
+        }
     }
 
+    public Player getCurrentPlayer(){
+        return currentPlayer;
+    }
+
+    public Board getBoard() {
+        return board;
+    }
+    public boolean checkWinner(Player player){
+        for (WinningStrategy strategy : winningStrategies) {
+            if (strategy.checkWinner(board, player)) {
+                return true;
+            }
+        }
+        return false;
+    }
+    public void setWinner(Player player){
+        this.winner = player;
+    }
+    public Player getWinner(){
+        return winner;
+    }
+    public void switchPlayer() {
+        this.currentPlayer = (currentPlayer == player1) ? player2 : player1;
+    }
     void start(){
         /*
         * TODO
@@ -65,10 +104,17 @@ public class Game implements GameSubject {
         System.out.println("Started the game with player - " + currentPlayer.getPlayerName());
         System.out.println("Game status is " + Status.IN_PROGRESS);
         board.displayBoard();
-        makeMove();
+
+        while (state instanceof InProgress){
+            makeMove();
+        }
     }
 
     void makeMove(){
+        if(!(state instanceof InProgress)){
+            throw new InvalidMoveException("Game is already over. No further moves allowed.");
+        }
+
         Scanner scanner = new Scanner(System.in);
         System.out.println(currentPlayer.getPlayerName() + ", please provide valid row for your move");
         int row = scanner.nextInt();
