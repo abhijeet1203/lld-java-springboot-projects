@@ -1,0 +1,11 @@
+| Area                  | Verdict         | Notes                             |
+| --------------------- | --------------- | --------------------------------- |
+| API Design            | ✅ Good start    | Needs contracts, validation       |
+| Entity Modeling       | ✅ Mostly there  | Add Ticket, Gate, etc.            |
+| Class Design          | Done      | Add Java classes/interfaces       |
+| Slot Allocation Logic | Clarified       | Needs abstraction & extensibility |
+| Concurrency Awareness | ❌ Not addressed | Use locks or atomic updates       |
+| Extensibility         | ⚠️ Minimal      | Add strategies, plug-in points    |
+| Design Patterns       | Considered    | Use Strategy, Factory, etc.       |
+
+https://abhijeet-dev.atlassian.net/jira/core/projects/IPREP/board?filter=&groupBy=status
