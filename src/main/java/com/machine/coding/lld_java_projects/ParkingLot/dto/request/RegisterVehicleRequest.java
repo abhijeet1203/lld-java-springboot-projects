@@ -16,11 +16,11 @@ public class RegisterVehicleRequest {
         return vehicleType;
     }
 
-    public void setVehicleType(String getVehicleType) {
+    public void setVehicleType(String vehicleType) {
         this.vehicleType = vehicleType;
     }
 
-    public RegisterVehicleRequest(String vehicleNumber, String getVehicleType) {
+    public RegisterVehicleRequest(String vehicleNumber, String vehicleType) {
         this.vehicleNumber = vehicleNumber;
         this.vehicleType = vehicleType;
     }
