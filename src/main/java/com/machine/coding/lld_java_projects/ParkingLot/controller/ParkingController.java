@@ -2,9 +2,12 @@ package com.machine.coding.lld_java_projects.ParkingLot.controller;
 
 import com.machine.coding.lld_java_projects.ParkingLot.dto.request.FetchAvailableSlotRequest;
 import com.machine.coding.lld_java_projects.ParkingLot.dto.request.RegisterVehicleRequest;
+import com.machine.coding.lld_java_projects.ParkingLot.dto.request.SlotConfirmationRequest;
 import com.machine.coding.lld_java_projects.ParkingLot.dto.response.FetchAvailableSlotResponse;
 import com.machine.coding.lld_java_projects.ParkingLot.dto.response.RegisterVehicleResponse;
+import com.machine.coding.lld_java_projects.ParkingLot.dto.response.SlotConfirmationResponse;
 import com.machine.coding.lld_java_projects.ParkingLot.model.Slot;
+import com.machine.coding.lld_java_projects.ParkingLot.service.SlotConfirmationService;
 import com.machine.coding.lld_java_projects.ParkingLot.service.SlotService;
 import com.machine.coding.lld_java_projects.ParkingLot.service.VehicleService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +27,8 @@ public class ParkingController {
     private VehicleService vehicleService;
     @Autowired
     private SlotService slotService;
+    @Autowired
+    private SlotConfirmationService slotConfirmationService;
 
     @PostMapping("/vehicles/register")
     public ResponseEntity<RegisterVehicleResponse> registerVehicle(@RequestBody RegisterVehicleRequest request){
@@ -70,6 +75,40 @@ public class ParkingController {
             //Build Response object
             FetchAvailableSlotResponse response = new FetchAvailableSlotResponse(failedResult);
             return ResponseEntity.internalServerError().body(response);
+        }
+    }
+
+    @PostMapping("/slots/confirmation")
+    public ResponseEntity<SlotConfirmationResponse> confirmSlot(@RequestBody SlotConfirmationRequest request){
+        try{
+            String bookedTicket = slotConfirmationService.confirmBooking(request);
+
+            SlotConfirmationResponse.Result result = new SlotConfirmationResponse.Result();
+            result.setMessage("Slot confirmed successfully");
+            result.setSuccess(true);
+            result.setTicket(bookedTicket);
+
+            SlotConfirmationResponse.Result.VehicleData vehicleData = new SlotConfirmationResponse.Result.VehicleData();
+            vehicleData.setType(request.getVehicleType());
+            vehicleData.setRegistrationNumber(request.getVehicleNumber());
+
+            SlotConfirmationResponse.Result.ConfirmedSlotData confirmedSlotData = new SlotConfirmationResponse.Result.ConfirmedSlotData();
+            confirmedSlotData.setSlotStatus("OCCUPIED");
+            confirmedSlotData.setSlotId(request.getSlotToConfirm());
+
+            result.setConfirmedSlotData(confirmedSlotData);
+            result.setVehicleData(vehicleData);
+
+            SlotConfirmationResponse response = new SlotConfirmationResponse(result);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            SlotConfirmationResponse.Result failedResult = new SlotConfirmationResponse.Result();
+            failedResult.setMessage("Slot confirmation failed");
+            failedResult.setSuccess(false);
+            failedResult.setError(e.getMessage());
+
+            SlotConfirmationResponse failedResponse = new SlotConfirmationResponse(failedResult);
+            return ResponseEntity.internalServerError().body(failedResponse);
         }
     }
 }
