@@ -1,6 +1,7 @@
 package com.machine.coding.lld_java_projects.ParkingLot.service;
 
 import com.machine.coding.lld_java_projects.ParkingLot.dto.request.SlotConfirmationRequest;
+import com.machine.coding.lld_java_projects.ParkingLot.enums.SlotStatuses;
 import com.machine.coding.lld_java_projects.ParkingLot.model.Booking;
 import com.machine.coding.lld_java_projects.ParkingLot.model.Slot;
 import com.machine.coding.lld_java_projects.ParkingLot.repository.BookingRepository;
@@ -38,7 +39,7 @@ public class SlotConfirmationService {
 
     private void occupySlot(String slotId){
         Slot slot = slotRepository.findBySlotId(slotId);
-        slot.setSlotStatus("OCCUPIED");
+        slot.setSlotStatus(SlotStatuses.OCCUPIED.name());
         slotRepository.save(slot);
     }
 

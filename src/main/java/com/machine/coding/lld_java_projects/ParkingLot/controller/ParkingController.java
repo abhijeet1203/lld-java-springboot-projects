@@ -3,17 +3,23 @@ package com.machine.coding.lld_java_projects.ParkingLot.controller;
 import com.machine.coding.lld_java_projects.ParkingLot.dto.request.FetchAvailableSlotRequest;
 import com.machine.coding.lld_java_projects.ParkingLot.dto.request.RegisterVehicleRequest;
 import com.machine.coding.lld_java_projects.ParkingLot.dto.request.SlotConfirmationRequest;
+import com.machine.coding.lld_java_projects.ParkingLot.dto.request.VehicleCheckoutRequest;
 import com.machine.coding.lld_java_projects.ParkingLot.dto.response.FetchAvailableSlotResponse;
 import com.machine.coding.lld_java_projects.ParkingLot.dto.response.RegisterVehicleResponse;
 import com.machine.coding.lld_java_projects.ParkingLot.dto.response.SlotConfirmationResponse;
+import com.machine.coding.lld_java_projects.ParkingLot.dto.response.VehicleCheckoutResponse;
+import com.machine.coding.lld_java_projects.ParkingLot.enums.VehicleTypes;
 import com.machine.coding.lld_java_projects.ParkingLot.model.Slot;
 import com.machine.coding.lld_java_projects.ParkingLot.service.SlotConfirmationService;
 import com.machine.coding.lld_java_projects.ParkingLot.service.SlotService;
+import com.machine.coding.lld_java_projects.ParkingLot.service.VehicleCheckoutService;
 import com.machine.coding.lld_java_projects.ParkingLot.service.VehicleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -29,6 +35,8 @@ public class ParkingController {
     private SlotService slotService;
     @Autowired
     private SlotConfirmationService slotConfirmationService;
+    @Autowired
+    private VehicleCheckoutService vehicleCheckoutService;
 
     @PostMapping("/vehicles/register")
     public ResponseEntity<RegisterVehicleResponse> registerVehicle(@RequestBody RegisterVehicleRequest request){
@@ -109,6 +117,45 @@ public class ParkingController {
 
             SlotConfirmationResponse failedResponse = new SlotConfirmationResponse(failedResult);
             return ResponseEntity.internalServerError().body(failedResponse);
+        }
+    }
+
+    @PostMapping("/vehicle/checkout")
+    public ResponseEntity<VehicleCheckoutResponse> checkoutVehicle(@RequestBody VehicleCheckoutRequest request){
+        try {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
+            String inTime = request.getInTime();
+            LocalDateTime parsedInTime = LocalDateTime.parse(inTime, formatter);
+            VehicleTypes vehicleType = request.getVehicleType();
+            String slotId = request.getSlotId();
+            LocalDateTime outTime = LocalDateTime.now();
+            long bookingId = request.getBookingId();
+
+            double calculatedFare = vehicleCheckoutService.checkoutVehicle(vehicleType, parsedInTime, outTime, slotId, bookingId);
+
+            VehicleCheckoutResponse.Result result = new VehicleCheckoutResponse.Result();
+
+            result.setCurrency("INR");
+            result.setFare(calculatedFare);
+            result.setMessage("Vehicle checkout successfully done");
+            result.setSuccess(true);
+            result.setVehicleType(vehicleType);
+            result.setInTime(parsedInTime);
+            result.setVehicleNumber(request.getVehicleNumber());
+            result.setOutTime(outTime);
+            result.setSlotId(slotId);
+
+            VehicleCheckoutResponse response = new VehicleCheckoutResponse(result);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            VehicleCheckoutResponse.Result failedResult = new VehicleCheckoutResponse.Result();
+
+            failedResult.setSuccess(false);
+            failedResult.setMessage("Vehicle checkout failed");
+            failedResult.setError(e.getMessage());
+
+            VehicleCheckoutResponse response = new VehicleCheckoutResponse(failedResult);
+            return ResponseEntity.internalServerError().body(response);
         }
     }
 }

@@ -29,6 +29,39 @@ public class Booking {
     @Column(name = "exit")
     private LocalDateTime exit;
 
+    @Column(name = "fare")
+    private Double fare;
+
+    @Column(name = "payment_method")
+    private String paymentMethod;
+
+    @Column(name = "payment_status")
+    private String paymentStatus;
+
+    public Double getFare() {
+        return fare;
+    }
+
+    public void setFare(Double fare) {
+        this.fare = fare;
+    }
+
+    public String getPaymentMethod() {
+        return paymentMethod;
+    }
+
+    public void setPaymentMethod(String paymentMethod) {
+        this.paymentMethod = paymentMethod;
+    }
+
+    public String getPaymentStatus() {
+        return paymentStatus;
+    }
+
+    public void setPaymentStatus(String paymentStatus) {
+        this.paymentStatus = paymentStatus;
+    }
+
     public long getId() {
         return id;
     }
@@ -85,14 +118,17 @@ public class Booking {
         this.exit = exit;
     }
 
-    public Booking(long id, String slotId, String ticket, String vehicleType, String vehicleNumber, LocalDateTime entry, LocalDateTime exit) {
+    public Booking(long id, String slotId, String vehicleType, String vehicleNumber, String ticket, LocalDateTime entry, LocalDateTime exit, double fare, String paymentMethod, String paymentStatus) {
         this.id = id;
         this.slotId = slotId;
-        this.ticket = ticket;
         this.vehicleType = vehicleType;
         this.vehicleNumber = vehicleNumber;
+        this.ticket = ticket;
         this.entry = entry;
         this.exit = exit;
+        this.fare = fare;
+        this.paymentMethod = paymentMethod;
+        this.paymentStatus = paymentStatus;
     }
 
     public Booking() {
