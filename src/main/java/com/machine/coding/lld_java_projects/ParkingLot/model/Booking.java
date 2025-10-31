@@ -1,5 +1,6 @@
 package com.machine.coding.lld_java_projects.ParkingLot.model;
 
+import com.machine.coding.lld_java_projects.ParkingLot.enums.PaymentMethods;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
@@ -33,10 +34,10 @@ public class Booking {
     private Double fare;
 
     @Column(name = "payment_method")
-    private String paymentMethod;
+    private PaymentMethods paymentMethod;
 
     @Column(name = "payment_status")
-    private String paymentStatus;
+    private Boolean paymentStatus;
 
     public Double getFare() {
         return fare;
@@ -46,19 +47,19 @@ public class Booking {
         this.fare = fare;
     }
 
-    public String getPaymentMethod() {
+    public PaymentMethods getPaymentMethod() {
         return paymentMethod;
     }
 
-    public void setPaymentMethod(String paymentMethod) {
+    public void setPaymentMethod(PaymentMethods paymentMethod) {
         this.paymentMethod = paymentMethod;
     }
 
-    public String getPaymentStatus() {
+    public boolean getPaymentStatus() {
         return paymentStatus;
     }
 
-    public void setPaymentStatus(String paymentStatus) {
+    public void setPaymentStatus(boolean paymentStatus) {
         this.paymentStatus = paymentStatus;
     }
 
@@ -118,7 +119,7 @@ public class Booking {
         this.exit = exit;
     }
 
-    public Booking(long id, String slotId, String vehicleType, String vehicleNumber, String ticket, LocalDateTime entry, LocalDateTime exit, double fare, String paymentMethod, String paymentStatus) {
+    public Booking(long id, String slotId, String vehicleType, String vehicleNumber, String ticket, LocalDateTime entry, LocalDateTime exit, double fare, PaymentMethods paymentMethod, boolean paymentStatus) {
         this.id = id;
         this.slotId = slotId;
         this.vehicleType = vehicleType;

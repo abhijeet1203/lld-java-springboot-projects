@@ -1,19 +1,11 @@
 package com.machine.coding.lld_java_projects.ParkingLot.controller;
 
-import com.machine.coding.lld_java_projects.ParkingLot.dto.request.FetchAvailableSlotRequest;
-import com.machine.coding.lld_java_projects.ParkingLot.dto.request.RegisterVehicleRequest;
-import com.machine.coding.lld_java_projects.ParkingLot.dto.request.SlotConfirmationRequest;
-import com.machine.coding.lld_java_projects.ParkingLot.dto.request.VehicleCheckoutRequest;
-import com.machine.coding.lld_java_projects.ParkingLot.dto.response.FetchAvailableSlotResponse;
-import com.machine.coding.lld_java_projects.ParkingLot.dto.response.RegisterVehicleResponse;
-import com.machine.coding.lld_java_projects.ParkingLot.dto.response.SlotConfirmationResponse;
-import com.machine.coding.lld_java_projects.ParkingLot.dto.response.VehicleCheckoutResponse;
+import com.machine.coding.lld_java_projects.ParkingLot.dto.request.*;
+import com.machine.coding.lld_java_projects.ParkingLot.dto.response.*;
+import com.machine.coding.lld_java_projects.ParkingLot.enums.PaymentMethods;
 import com.machine.coding.lld_java_projects.ParkingLot.enums.VehicleTypes;
 import com.machine.coding.lld_java_projects.ParkingLot.model.Slot;
-import com.machine.coding.lld_java_projects.ParkingLot.service.SlotConfirmationService;
-import com.machine.coding.lld_java_projects.ParkingLot.service.SlotService;
-import com.machine.coding.lld_java_projects.ParkingLot.service.VehicleCheckoutService;
-import com.machine.coding.lld_java_projects.ParkingLot.service.VehicleService;
+import com.machine.coding.lld_java_projects.ParkingLot.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -37,6 +29,8 @@ public class ParkingController {
     private SlotConfirmationService slotConfirmationService;
     @Autowired
     private VehicleCheckoutService vehicleCheckoutService;
+    @Autowired
+    private PaymentService paymentService;
 
     @PostMapping("/vehicles/register")
     public ResponseEntity<RegisterVehicleResponse> registerVehicle(@RequestBody RegisterVehicleRequest request){
@@ -155,6 +149,52 @@ public class ParkingController {
             failedResult.setError(e.getMessage());
 
             VehicleCheckoutResponse response = new VehicleCheckoutResponse(failedResult);
+            return ResponseEntity.internalServerError().body(response);
+        }
+    }
+    @PostMapping("/vehicle/payments")
+    public ResponseEntity<PaymentResponse>completePayment(@RequestBody PaymentRequest request){
+        try{
+            PaymentMethods paymentMethod = request.getPaymentMethod();
+            boolean isPaymentSuccess = paymentService.makePayment(paymentMethod, request.getAmountToPay(), request.getBookingId());
+            PaymentResponse.Result result = new PaymentResponse.Result();
+            if(isPaymentSuccess){
+                result.setAmountPaid(request.getAmountToPay());
+                result.setCurrency("INR");
+                result.setMessage("Payment successful");
+                result.setPaymentMethod(paymentMethod);
+                result.setSuccess(isPaymentSuccess);
+                result.setVehicleType(request.getVehicleType());
+                result.setSlotId(request.getSlotId());
+                result.setVehicleNumber(request.getVehicleNumber());
+
+                PaymentResponse response = new PaymentResponse(result);
+                return ResponseEntity.ok(response);
+            }else {
+                result.setAmountPaid(request.getAmountToPay());
+                result.setCurrency("INR");
+                result.setMessage("Payment failed");
+                result.setPaymentMethod(paymentMethod);
+                result.setSuccess(isPaymentSuccess);
+                result.setVehicleType(request.getVehicleType());
+                result.setSlotId(request.getSlotId());
+                result.setVehicleNumber(request.getVehicleNumber());
+
+                PaymentResponse response = new PaymentResponse(result);
+                return ResponseEntity.ok(response);
+            }
+        } catch (Exception e) {
+            PaymentResponse.Result failedResult = new PaymentResponse.Result();
+            failedResult.setAmountPaid(request.getAmountToPay());
+            failedResult.setCurrency("INR");
+            failedResult.setMessage("Error, payment failed");
+            failedResult.setSuccess(false);
+            failedResult.setVehicleType(request.getVehicleType());
+            failedResult.setSlotId(request.getSlotId());
+            failedResult.setVehicleNumber(request.getVehicleNumber());
+            failedResult.setError(e.getMessage());
+
+            PaymentResponse response = new PaymentResponse(failedResult);
             return ResponseEntity.internalServerError().body(response);
         }
     }
