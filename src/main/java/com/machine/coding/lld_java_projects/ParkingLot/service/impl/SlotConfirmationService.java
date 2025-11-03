@@ -1,4 +1,4 @@
-package com.machine.coding.lld_java_projects.ParkingLot.service;
+package com.machine.coding.lld_java_projects.ParkingLot.service.impl;
 
 import com.machine.coding.lld_java_projects.ParkingLot.dto.request.SlotConfirmationRequest;
 import com.machine.coding.lld_java_projects.ParkingLot.enums.SlotStatuses;
@@ -6,19 +6,21 @@ import com.machine.coding.lld_java_projects.ParkingLot.model.Booking;
 import com.machine.coding.lld_java_projects.ParkingLot.model.Slot;
 import com.machine.coding.lld_java_projects.ParkingLot.repository.BookingRepository;
 import com.machine.coding.lld_java_projects.ParkingLot.repository.SlotRepository;
+import com.machine.coding.lld_java_projects.ParkingLot.service.interfaces.ISlotService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 
 @Service
-public class SlotConfirmationService {
+public class SlotConfirmationService implements ISlotService {
     @Autowired
     private BookingRepository bookingRepository;
 
     @Autowired
     private SlotRepository slotRepository;
 
+    @Override
     public String confirmBooking(SlotConfirmationRequest request){
         //Insert Record in Bookings table
         Booking booking = new Booking();
@@ -37,13 +39,15 @@ public class SlotConfirmationService {
         return ticket;
     }
 
-    private void occupySlot(String slotId){
+    @Override
+    public void occupySlot(String slotId){
         Slot slot = slotRepository.findBySlotId(slotId);
         slot.setSlotStatus(SlotStatuses.OCCUPIED.name());
         slotRepository.save(slot);
     }
 
-    private String generateTicket(){
+    @Override
+    public String generateTicket(){
         System.out.println("Ticket generated and saved successfully");
         return "https://gcloud.bucket.ticket-001";
     }

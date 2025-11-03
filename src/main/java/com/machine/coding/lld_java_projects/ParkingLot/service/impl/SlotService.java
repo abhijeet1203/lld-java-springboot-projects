@@ -1,6 +1,6 @@
-package com.machine.coding.lld_java_projects.ParkingLot.service;
+package com.machine.coding.lld_java_projects.ParkingLot.service.impl;
 
-import com.machine.coding.lld_java_projects.ParkingLot.dto.request.FetchAvailableSlotRequest;
+import com.machine.coding.lld_java_projects.ParkingLot.enums.SlotStatuses;
 import com.machine.coding.lld_java_projects.ParkingLot.model.Slot;
 import com.machine.coding.lld_java_projects.ParkingLot.repository.SlotRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,8 +12,7 @@ import java.util.List;
 public class SlotService {
     @Autowired
     private SlotRepository slotRepository;
-
     public List<Slot> fetchAvailableSlots(String vehicleType){
-        return slotRepository.findByVehicleTypeAndSlotStatus(vehicleType, "AVAILABLE");
+        return slotRepository.findByVehicleTypeAndSlotStatus(vehicleType, SlotStatuses.AVAILABLE.name());
     }
 }

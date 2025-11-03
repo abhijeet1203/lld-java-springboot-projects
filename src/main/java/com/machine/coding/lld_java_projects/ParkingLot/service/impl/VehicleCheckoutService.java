@@ -1,4 +1,4 @@
-package com.machine.coding.lld_java_projects.ParkingLot.service;
+package com.machine.coding.lld_java_projects.ParkingLot.service.impl;
 
 import com.machine.coding.lld_java_projects.ParkingLot.enums.SlotStatuses;
 import com.machine.coding.lld_java_projects.ParkingLot.enums.VehicleTypes;
@@ -6,13 +6,14 @@ import com.machine.coding.lld_java_projects.ParkingLot.model.Booking;
 import com.machine.coding.lld_java_projects.ParkingLot.model.Slot;
 import com.machine.coding.lld_java_projects.ParkingLot.repository.BookingRepository;
 import com.machine.coding.lld_java_projects.ParkingLot.repository.SlotRepository;
+import com.machine.coding.lld_java_projects.ParkingLot.service.interfaces.IVehicleExitService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 
 @Service
-public class VehicleCheckoutService {
+public class VehicleCheckoutService implements IVehicleExitService {
     FareCalculationService fareCalculationService;
     @Autowired
     SlotRepository slotRepository;
@@ -22,7 +23,7 @@ public class VehicleCheckoutService {
     public VehicleCheckoutService(FareCalculationService fareCalculationService){
         this.fareCalculationService = fareCalculationService;
     }
-
+    @Override
     public double checkoutVehicle(VehicleTypes vehicleType, LocalDateTime inTime, LocalDateTime outTime, String slotId, long id){
         //Make slot ID available for other bookings
         Slot slot = slotRepository.findBySlotId(slotId);

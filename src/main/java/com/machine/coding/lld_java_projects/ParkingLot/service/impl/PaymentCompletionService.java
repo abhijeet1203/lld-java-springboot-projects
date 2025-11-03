@@ -1,4 +1,4 @@
-package com.machine.coding.lld_java_projects.ParkingLot.service;
+package com.machine.coding.lld_java_projects.ParkingLot.service.impl;
 
 import com.machine.coding.lld_java_projects.ParkingLot.enums.PaymentMethods;
 import com.machine.coding.lld_java_projects.ParkingLot.strategy.payments.PaymentStrategy;

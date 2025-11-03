@@ -5,7 +5,7 @@ import com.machine.coding.lld_java_projects.ParkingLot.dto.response.*;
 import com.machine.coding.lld_java_projects.ParkingLot.enums.PaymentMethods;
 import com.machine.coding.lld_java_projects.ParkingLot.enums.VehicleTypes;
 import com.machine.coding.lld_java_projects.ParkingLot.model.Slot;
-import com.machine.coding.lld_java_projects.ParkingLot.service.*;
+import com.machine.coding.lld_java_projects.ParkingLot.service.impl.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 //Exposes all API
