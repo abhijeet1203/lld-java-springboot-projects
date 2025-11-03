@@ -7,6 +7,7 @@ import com.machine.coding.lld_java_projects.ParkingLot.model.Slot;
 import com.machine.coding.lld_java_projects.ParkingLot.repository.BookingRepository;
 import com.machine.coding.lld_java_projects.ParkingLot.repository.SlotRepository;
 import com.machine.coding.lld_java_projects.ParkingLot.service.interfaces.ISlotService;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -39,9 +40,28 @@ public class SlotConfirmationService implements ISlotService {
         return ticket;
     }
 
+    //Below code with Synchronized is very simple and only used for single instance projects, not for live production ready projects
+    //Reentrant lock can also be used for better control
+
+    //    public void occupySlot(String slotId){
+    //        synchronized (slotId.intern()){
+    //            Slot slot = slotRepository.findBySlotId(slotId);
+    //            if(SlotStatuses.OCCUPIED.name().equals(slot.getSlotStatus())){
+    //                throw new IllegalStateException("Slot already occupied!");
+    //            }
+    //            slot.setSlotStatus(SlotStatuses.OCCUPIED.name());
+    //            slotRepository.save(slot);
+    //        }
+    //    }
+
+    //----BETTER APPROACH----
+    @Transactional
     @Override
     public void occupySlot(String slotId){
-        Slot slot = slotRepository.findBySlotId(slotId);
+        Slot slot = slotRepository.findBySlotIdForUpdate(slotId); //row-level locking
+        if(SlotStatuses.OCCUPIED.name().equals(slot.getSlotStatus())){
+            throw new IllegalStateException("Slot already occupied!");
+        }
         slot.setSlotStatus(SlotStatuses.OCCUPIED.name());
         slotRepository.save(slot);
     }

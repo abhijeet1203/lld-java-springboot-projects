@@ -19,3 +19,13 @@ Improvements in parking lot system -
 |                | Chain of Responsibility | Valid                          | For any sequential flow
 |                | Command                 | Not valid for now              | Needed if system has queuing task, payment systems integration. May be needed once project is upgraded.
 |                | State                   | Not valid for now              | Needed if want to switch between states, avoids if-else or switch
+
+Multi-threading/Concurrency - 🎯 Must-Know
+--------------------------------------------
+1. Thread basics & safety – what is a thread, race condition, atomicity.
+2. synchronized & volatile – how they ensure visibility & mutual exclusion.
+3. Locks – ReentrantLock vs synchronized, when to use which.
+4. Executor Framework – ExecutorService, submit(), Callable, Future.
+5. Thread pools – fixed vs cached, why we use them.
+6. Deadlock – what it is, how to prevent it (ordering locks / timeout).
+7. wait/notify – basics of inter-thread communication.

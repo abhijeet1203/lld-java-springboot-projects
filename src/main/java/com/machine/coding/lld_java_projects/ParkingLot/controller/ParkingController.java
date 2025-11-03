@@ -38,7 +38,7 @@ public class ParkingController {
             if(isVehicleRegistered){
                 return ResponseEntity.ok(new RegisterVehicleResponse("Vehicle Registration Successful", true));
             }else {
-                return ResponseEntity.badRequest().body(new RegisterVehicleResponse("Vehicle Registration Successful", true));
+                return ResponseEntity.badRequest().body(new RegisterVehicleResponse("Vehicle Registration failed", false));
             }
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body(new RegisterVehicleResponse("Vehicle Registration Failed",false));

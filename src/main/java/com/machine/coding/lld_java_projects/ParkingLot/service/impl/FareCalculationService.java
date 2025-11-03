@@ -1,7 +1,7 @@
 package com.machine.coding.lld_java_projects.ParkingLot.service.impl;
 
 import com.machine.coding.lld_java_projects.ParkingLot.enums.VehicleTypes;
-import com.machine.coding.lld_java_projects.ParkingLot.strategy.FareStrategy;
+import com.machine.coding.lld_java_projects.ParkingLot.strategy.fare.FareStrategy;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;

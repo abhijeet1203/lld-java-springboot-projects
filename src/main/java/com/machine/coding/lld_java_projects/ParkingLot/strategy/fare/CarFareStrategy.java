@@ -1,4 +1,4 @@
-package com.machine.coding.lld_java_projects.ParkingLot.strategy;
+package com.machine.coding.lld_java_projects.ParkingLot.strategy.fare;
 
 import org.springframework.stereotype.Component;
 

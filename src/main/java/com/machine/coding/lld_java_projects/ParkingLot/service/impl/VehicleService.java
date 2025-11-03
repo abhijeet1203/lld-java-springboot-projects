@@ -17,7 +17,6 @@ public class VehicleService implements IVehicleService {
     @Override
     public boolean registerVehicle(RegisterVehicleRequest request){
         try{
-            System.out.println("Vehicle type - " + request.getVehicleType());
             Vehicle vehicle = new Vehicle(); //Model
             vehicle.setRegistrationNumber(request.getVehicleNumber());
             vehicle.setType(request.getVehicleType());
