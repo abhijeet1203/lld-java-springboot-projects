@@ -1,0 +1,21 @@
+Improvements in parking lot system -
+
+1. Add more interfaces for better abstraction (Services and Repositories) - IPREP-23
+2. Enhance/scale the application for concurrency/multi-threading. - https://abhijeet-dev.atlassian.net/jira/core/projects/IPREP/board?filter=&groupBy=status&selectedIssue=IPREP-23
+3. Global error handling - IPREP-25
+4. Authentication and Authorization using proper tokens - IPREP-26
+5. Design patterns -
+| Category       | Pattern                 | Role in Parking Lot            | Usecases                     |
+| -------------- | ----------------------- | ------------------------------ | ---------------------------- |
+| Creational     | Singleton               | Valid                          | ParkingLotManager/DB connection - IPREP-27
+|                | Factory                 | Not valid                      |                              |
+|                | Abstract Factory        | Not valid                      |                              |
+|                | Builder                 | Valid                          | Booking objects, result & failed results objects
+| Structural     | Decorator               | Not valid                      |                              |
+|                | Adapter                 | Not valid                      |
+|                | Facade                  | Valid                          | ✅ Already used at ParkingLotApplication and ParkingController
+| Behavioral     | Strategy                | Valid                          | ✅ Already used at Fare / Slot allocation
+|                | Observer                | Valid                          | Logging, notification on slot empty or filled, DB changes on some event
+|                | Chain of Responsibility | Valid                          | For any sequential flow
+|                | Command                 | Not valid for now              | Needed if system has queuing task, payment systems integration. May be needed once project is upgraded.
+|                | State                   | Not valid for now              | Needed if want to switch between states, avoids if-else or switch
