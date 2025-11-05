@@ -76,5 +76,48 @@ public class FetchAvailableSlotResponse {
 
         public Result() {
         }
+
+        public static class Builder{
+            private String message;
+            private boolean success;
+            private boolean isParkingFull;
+            private String vehicleType;
+            private List<String> slotAvailable;
+
+            public Builder message(String message){
+                this.message = message;
+                return this;
+            }
+
+            public Builder success(boolean success){
+                this.success = success;
+                return this;
+            }
+
+            public Builder isParkingFull(boolean isParkingFull){
+                this.isParkingFull = isParkingFull;
+                return this;
+            }
+
+            public Builder vehicleType(String vehicleType){
+                this.vehicleType = vehicleType;
+                return this;
+            }
+
+            public Builder slotAvailable(List<String> slotAvailable){
+                this.slotAvailable = slotAvailable;
+                return this;
+            }
+
+            public Result build(){
+                Result result = new Result();
+                result.setVehicleType(this.vehicleType);
+                result.setMessage(this.message);
+                result.setSlotAvailable(this.slotAvailable);
+                result.setSuccess(this.success);
+                result.setIsParkingFull(this.isParkingFull);
+                return result;
+            }
+        }
     }
 }

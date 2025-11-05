@@ -119,7 +119,7 @@ public class Booking {
         this.exit = exit;
     }
 
-    public Booking(long id, String slotId, String vehicleType, String vehicleNumber, String ticket, LocalDateTime entry, LocalDateTime exit, double fare, PaymentMethods paymentMethod, boolean paymentStatus) {
+    public Booking(long id, String slotId, String vehicleType, String vehicleNumber, String ticket, LocalDateTime entry, LocalDateTime exit, Double fare, PaymentMethods paymentMethod, boolean paymentStatus) {
         this.id = id;
         this.slotId = slotId;
         this.vehicleType = vehicleType;
@@ -133,5 +133,76 @@ public class Booking {
     }
 
     public Booking() {
+    }
+
+    public static class Builder {
+        private String slotId;
+        private String vehicleType;
+        private String vehicleNumber;
+        private String ticket;
+        private LocalDateTime entry;
+        private LocalDateTime exit;
+        private Double fare;
+        private PaymentMethods paymentMethod;
+        private boolean paymentStatus;
+
+        public Builder slotId(String slotId){
+            this.slotId = slotId;
+            return this;
+        }
+
+        public Builder vehicleType(String vehicleType){
+            this.vehicleType = vehicleType;
+            return this;
+        }
+
+        public Builder vehicleNumber(String vehicleNumber){
+            this.vehicleNumber = vehicleNumber;
+            return this;
+        }
+
+        public Builder ticket(String ticket){
+            this.ticket = ticket;
+            return this;
+        }
+
+        public Builder entry(LocalDateTime entry){
+            this.entry = entry;
+            return this;
+        }
+
+        public Builder exit(LocalDateTime exit){
+            this.exit = exit;
+            return this;
+        }
+
+        public Builder fare(Double fare){
+            this.fare = fare;
+            return this;
+        }
+
+        public Builder paymentMethod(PaymentMethods paymentMethod){
+            this.paymentMethod = paymentMethod;
+            return this;
+        }
+
+        public Builder paymentStatus(boolean paymentStatus){
+            this.paymentStatus = paymentStatus;
+            return this;
+        }
+
+        public Booking build(){
+            Booking booking = new Booking();
+            booking.setSlotId(this.slotId);
+            booking.setVehicleType(this.vehicleType);
+            booking.setExit(this.exit);
+            booking.setTicket(this.ticket);
+            booking.setEntry(this.entry);
+            booking.setVehicleNumber(this.vehicleNumber);
+            booking.setFare(this.fare);
+            booking.setPaymentMethod(this.paymentMethod);
+            booking.setPaymentStatus(this.paymentStatus);
+            return booking;
+        }
     }
 }

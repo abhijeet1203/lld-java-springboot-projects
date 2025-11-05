@@ -10,7 +10,6 @@ import com.machine.coding.lld_java_projects.ParkingLot.service.interfaces.ISlotS
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.time.LocalDateTime;
 
 @Service
@@ -24,11 +23,12 @@ public class SlotConfirmationService implements ISlotService {
     @Override
     public String confirmBooking(SlotConfirmationRequest request){
         //Insert Record in Bookings table
-        Booking booking = new Booking();
-        booking.setEntry(LocalDateTime.now());
-        booking.setSlotId(request.getSlotToConfirm());
-        booking.setVehicleNumber(request.getVehicleNumber());
-        booking.setVehicleType(request.getVehicleType());
+        Booking booking = new Booking.Builder()
+                .entry(LocalDateTime.now())
+                .slotId(request.getSlotToConfirm())
+                .vehicleNumber(request.getVehicleNumber())
+                .vehicleType(request.getVehicleType())
+                .build();
 
         //Update Slots table
         occupySlot(request.getSlotToConfirm());

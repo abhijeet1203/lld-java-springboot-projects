@@ -17,10 +17,12 @@ public class VehicleService implements IVehicleService {
     @Override
     public boolean registerVehicle(RegisterVehicleRequest request){
         try{
-            Vehicle vehicle = new Vehicle(); //Model
-            vehicle.setRegistrationNumber(request.getVehicleNumber());
-            vehicle.setType(request.getVehicleType());
-            vehicle.setEntryDate(LocalDateTime.now());
+            Vehicle vehicle = new Vehicle.Builder()
+                    .registrationNumber(request.getVehicleNumber())
+                            .type(request.getVehicleType())
+                                    .entryDate(LocalDateTime.now())
+                                            .build();
+
 
             vehicleRepository.save(vehicle);
             return true;

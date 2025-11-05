@@ -53,5 +53,32 @@ public class Vehicle {
         this.entryDate = entryDate;
     }
 
-    //Need empty arg constructor, so not defining it as its auto picked
+    public static class Builder {
+        private String registrationNumber;
+        private String type;
+        private LocalDateTime entryDate;
+
+        public Builder registrationNumber(String registrationNumber){
+            this.registrationNumber = registrationNumber;
+            return this;
+        }
+
+        public Builder type(String type){
+            this.type = type;
+            return this;
+        }
+
+        public Builder entryDate(LocalDateTime entryDate){
+            this.entryDate = entryDate;
+            return this;
+        }
+
+        public Vehicle build(){
+            Vehicle vehicle = new Vehicle();
+            vehicle.setRegistrationNumber(this.registrationNumber);
+            vehicle.setType(this.type);
+            vehicle.setEntryDate(this.entryDate);
+            return vehicle;
+        }
+    }
 }

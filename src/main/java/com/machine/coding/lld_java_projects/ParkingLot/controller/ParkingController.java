@@ -56,23 +56,24 @@ public class ParkingController {
                 slotIds.add(slot.getSlotId());
             }
             //Build Result object
-            FetchAvailableSlotResponse.Result result = new FetchAvailableSlotResponse.Result();
-            result.setMessage("Fetched Available Slots");
-            result.setSuccess(true);
-            result.setIsParkingFull(slotIds.isEmpty());
-            result.setSlotAvailable(slotIds);
-            result.setVehicleType(request.getVehicleType());
+            FetchAvailableSlotResponse.Result result = new FetchAvailableSlotResponse.Result.Builder()
+                                                                                                .message("Fetched Available Slots")
+                                                                                                .success(true)
+                                                                                                .isParkingFull(slotIds.isEmpty())
+                                                                                                .slotAvailable(slotIds)
+                                                                                                .vehicleType(request.getVehicleType())
+                                                                                                .build();
 
             //Build Response object
             FetchAvailableSlotResponse response = new FetchAvailableSlotResponse(result);
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             //Build Result object
-            FetchAvailableSlotResponse.Result failedResult = new FetchAvailableSlotResponse.Result();
-            failedResult.setMessage("Failed To Fetch Available Slots");
-            failedResult.setSuccess(false);
-            failedResult.setVehicleType(request.getVehicleType());
-
+            FetchAvailableSlotResponse.Result failedResult = new FetchAvailableSlotResponse.Result.Builder()
+                                                                                                    .message("Failed To Fetch Available Slots")
+                                                                                                    .success(false)
+                                                                                                    .vehicleType(request.getVehicleType())
+                                                                                                    .build();
             //Build Response object
             FetchAvailableSlotResponse response = new FetchAvailableSlotResponse(failedResult);
             return ResponseEntity.internalServerError().body(response);
