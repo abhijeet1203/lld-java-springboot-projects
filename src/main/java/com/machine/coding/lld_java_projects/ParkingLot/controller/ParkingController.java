@@ -57,12 +57,12 @@ public class ParkingController {
             }
             //Build Result object
             FetchAvailableSlotResponse.Result result = new FetchAvailableSlotResponse.Result.Builder()
-                                                                                                .message("Fetched Available Slots")
-                                                                                                .success(true)
-                                                                                                .isParkingFull(slotIds.isEmpty())
-                                                                                                .slotAvailable(slotIds)
-                                                                                                .vehicleType(request.getVehicleType())
-                                                                                                .build();
+                                                        .message("Fetched Available Slots")
+                                                        .success(true)
+                                                        .isParkingFull(slotIds.isEmpty())
+                                                        .slotAvailable(slotIds)
+                                                        .vehicleType(request.getVehicleType())
+                                                        .build();
 
             //Build Response object
             FetchAvailableSlotResponse response = new FetchAvailableSlotResponse(result);
@@ -70,10 +70,10 @@ public class ParkingController {
         } catch (Exception e) {
             //Build Result object
             FetchAvailableSlotResponse.Result failedResult = new FetchAvailableSlotResponse.Result.Builder()
-                                                                                                    .message("Failed To Fetch Available Slots")
-                                                                                                    .success(false)
-                                                                                                    .vehicleType(request.getVehicleType())
-                                                                                                    .build();
+                                                                .message("Failed To Fetch Available Slots")
+                                                                .success(false)
+                                                                .vehicleType(request.getVehicleType())
+                                                                .build();
             //Build Response object
             FetchAvailableSlotResponse response = new FetchAvailableSlotResponse(failedResult);
             return ResponseEntity.internalServerError().body(response);
@@ -85,29 +85,33 @@ public class ParkingController {
         try{
             String bookedTicket = slotConfirmationService.confirmBooking(request);
 
-            SlotConfirmationResponse.Result result = new SlotConfirmationResponse.Result();
-            result.setMessage("Slot confirmed successfully");
-            result.setSuccess(true);
-            result.setTicket(bookedTicket);
+            SlotConfirmationResponse.Result.VehicleData vehicleData = new SlotConfirmationResponse.Result.VehicleData.Builder()
+                    .type(request.getVehicleType())
+                    .registrationNumber(request.getVehicleNumber())
+                    .build();
 
-            SlotConfirmationResponse.Result.VehicleData vehicleData = new SlotConfirmationResponse.Result.VehicleData();
-            vehicleData.setType(request.getVehicleType());
-            vehicleData.setRegistrationNumber(request.getVehicleNumber());
+            SlotConfirmationResponse.Result.ConfirmedSlotData confirmedSlotData = new SlotConfirmationResponse.Result.ConfirmedSlotData.Builder()
+                    .slotId(request.getSlotToConfirm())
+                    .slotStatus("OCCUPIED")
+                    .build();
 
-            SlotConfirmationResponse.Result.ConfirmedSlotData confirmedSlotData = new SlotConfirmationResponse.Result.ConfirmedSlotData();
-            confirmedSlotData.setSlotStatus("OCCUPIED");
-            confirmedSlotData.setSlotId(request.getSlotToConfirm());
+            SlotConfirmationResponse.Result result = new SlotConfirmationResponse.Result.Builder()
+                    .ticket(bookedTicket)
+                    .message("Slot confirmed successfully")
+                    .success(true)
+                    .confirmedSlotData(confirmedSlotData)
+                    .vehicleData(vehicleData)
+                    .build();
 
-            result.setConfirmedSlotData(confirmedSlotData);
-            result.setVehicleData(vehicleData);
 
             SlotConfirmationResponse response = new SlotConfirmationResponse(result);
             return ResponseEntity.ok(response);
         } catch (Exception e) {
-            SlotConfirmationResponse.Result failedResult = new SlotConfirmationResponse.Result();
-            failedResult.setMessage("Slot confirmation failed");
-            failedResult.setSuccess(false);
-            failedResult.setError(e.getMessage());
+            SlotConfirmationResponse.Result failedResult = new SlotConfirmationResponse.Result.Builder()
+                    .message("Slot confirmation failed")
+                    .success(false)
+                    .error(e.getMessage())
+                    .build();
 
             SlotConfirmationResponse failedResponse = new SlotConfirmationResponse(failedResult);
             return ResponseEntity.internalServerError().body(failedResponse);
