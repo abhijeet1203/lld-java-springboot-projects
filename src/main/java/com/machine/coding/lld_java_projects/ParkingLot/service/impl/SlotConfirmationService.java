@@ -4,6 +4,7 @@ import com.machine.coding.lld_java_projects.ParkingLot.dto.request.SlotConfirmat
 import com.machine.coding.lld_java_projects.ParkingLot.enums.SlotStatuses;
 import com.machine.coding.lld_java_projects.ParkingLot.model.Booking;
 import com.machine.coding.lld_java_projects.ParkingLot.model.Slot;
+import com.machine.coding.lld_java_projects.ParkingLot.observer.SlotStatusNotifier;
 import com.machine.coding.lld_java_projects.ParkingLot.repository.BookingRepository;
 import com.machine.coding.lld_java_projects.ParkingLot.repository.SlotRepository;
 import com.machine.coding.lld_java_projects.ParkingLot.service.interfaces.ISlotService;
@@ -19,6 +20,9 @@ public class SlotConfirmationService implements ISlotService {
 
     @Autowired
     private SlotRepository slotRepository;
+
+    @Autowired
+    private SlotStatusNotifier slotStatusNotifier;
 
     @Override
     public String confirmBooking(SlotConfirmationRequest request){
@@ -64,6 +68,8 @@ public class SlotConfirmationService implements ISlotService {
         }
         slot.setSlotStatus(SlotStatuses.OCCUPIED.name());
         slotRepository.save(slot);
+        //Inform observers
+        slotStatusNotifier.notifyObserver(slotId, SlotStatuses.OCCUPIED.name());
     }
 
     @Override

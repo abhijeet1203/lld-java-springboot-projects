@@ -4,6 +4,7 @@ import com.machine.coding.lld_java_projects.ParkingLot.enums.SlotStatuses;
 import com.machine.coding.lld_java_projects.ParkingLot.enums.VehicleTypes;
 import com.machine.coding.lld_java_projects.ParkingLot.model.Booking;
 import com.machine.coding.lld_java_projects.ParkingLot.model.Slot;
+import com.machine.coding.lld_java_projects.ParkingLot.observer.SlotStatusNotifier;
 import com.machine.coding.lld_java_projects.ParkingLot.repository.BookingRepository;
 import com.machine.coding.lld_java_projects.ParkingLot.repository.SlotRepository;
 import com.machine.coding.lld_java_projects.ParkingLot.service.interfaces.IVehicleExitService;
@@ -20,6 +21,8 @@ public class VehicleCheckoutService implements IVehicleExitService {
     @Autowired
     BookingRepository bookingRepository;
     @Autowired
+    SlotStatusNotifier slotStatusNotifier;
+    @Autowired
     public VehicleCheckoutService(FareCalculationService fareCalculationService){
         this.fareCalculationService = fareCalculationService;
     }
@@ -29,6 +32,7 @@ public class VehicleCheckoutService implements IVehicleExitService {
         Slot slot = slotRepository.findBySlotId(slotId);
         slot.setSlotStatus(SlotStatuses.AVAILABLE.name());
         slotRepository.save(slot);
+        slotStatusNotifier.notifyObserver(slotId, SlotStatuses.AVAILABLE.name());
 
         //Calculate fare
         double fare = fareCalculationService.calculateFare(vehicleType, inTime, outTime);
